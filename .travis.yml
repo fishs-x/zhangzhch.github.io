@@ -1,34 +1,20 @@
-sudo: false
 language: go
-git:
-    depth: 1
 
-branches:
-  only:
-    - master
-
-env:
-  global:
-    - SOURCE_DIR="public"
-    - BUILD_BRANCH="source"
-    - DEPLOY_BRANCH="master"
+go:
+  - master # This uses automatically the latest version of go
 
 install:
-    - go get github.com/spf13/hugo 
-
+  - go get github.com/spf13/hugo # This provides the latest version of Hugo to Travis CI
 
 script:
-    ‐ hugo
-deploy:
-    provider: pages
-    skip_cleanup: true
-    github_token: abb3decb305c77c2c412cd942043f77e50154969
-    on:
-        branch: master
-    local_dir: public
-    repo: zhangzhch/zhangzhch.github.io
-    fqdn: blog.fluobo.cn
-    target_branch: master
-    email: zhangzhch2013@foxmail.com
-    name: zhangzhch
+  - hugo # This commands builds your website on travis
 
+deploy:
+  local_dir: public # Default static site output dir for Hugo
+  repo: zhangzhch/zhangzhch.github.io # This is the slug of the repo you want to deploy your site to
+  target_branch: master # GitHub pages branch to deploy to (in other cases it can be gh-pages)
+  provider: pages
+  skip_cleanup: true
+  github_token: abb3decb305c77c2c412cd942043f77e50154969 # This is the authentication which you will setup in the next step in travis-ci dashboard
+  on:
+    branch: master
