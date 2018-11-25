@@ -2,7 +2,7 @@ sudo: false
 language: go
 git:
     depth: 1
-install: snap install hugo 
+install: sudo apt-get install hugo
 script:
     ‐ hugo
 deploy:
