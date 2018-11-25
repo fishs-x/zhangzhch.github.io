@@ -14,12 +14,7 @@ env:
     - DEPLOY_BRANCH="master"
 
 install:
-  - go get github.com/magefile/mage
-  - go get -d github.com/gohugoio/hugo
-  - cd ${GOPATH:-$HOME/go}/src/github.com/gohugoio/hugo
-  - mage vendor
-  - mage install
-  - cd ${TRAVIS_BUILD_DIR}
+    - go get github.com/spf13/hugo 
 
 
 script:
