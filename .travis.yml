@@ -2,7 +2,26 @@ sudo: false
 language: go
 git:
     depth: 1
-install: sudo apt-get install hugo
+
+branches:
+  only:
+    - master
+
+env:
+  global:
+    - SOURCE_DIR="public"
+    - BUILD_BRANCH="source"
+    - DEPLOY_BRANCH="master"
+
+install:
+  - go get github.com/magefile/mage
+  - go get -d github.com/gohugoio/hugo
+  - cd ${GOPATH:-$HOME/go}/src/github.com/gohugoio/hugo
+  - mage vendor
+  - mage install
+  - cd ${TRAVIS_BUILD_DIR}
+
+
 script:
     ‐ hugo
 deploy:
