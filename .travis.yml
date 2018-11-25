@@ -1,26 +1,29 @@
-env:
-  - HUGO_VERSION="0.41"
+# https://docs.travis-ci.com/user/deployment/pages/
+# https://docs.travis-ci.com/user/languages/python/
+language: python
 
-language: go
-
-go:
-  - master # This uses automatically the latest version of go
+python:
+    - "3.6"
 
 install:
-  - wget -q https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz
-  - tar xf hugo_${HUGO_VERSION}_Linux-64bit.tar.gz
-  - mv hugo ~/bin/
-  - gem install html-proofer
+    # install latest release version
+    #- wget $(wget -qO- https://api.github.com/repos/gohugoio/hugo/releases/latest | sed -r -n '/browser_download_url/{/Linux-64bit.deb/{s@[^:]*:[[:space:]]*"([^"]*)".*@\1@g;p}}')
+    - wget -qO- https://api.github.com/repos/gohugoio/hugo/releases/latest | sed -r -n '/browser_download_url/{/Linux-64bit.deb/{s@[^:]*:[[:space:]]*"([^"]*)".*@\1@g;p}}' | xargs wget
+    - sudo dpkg -i hugo*.deb
+    - pip install Pygments
+    - rm -rf public 2> /dev/null
 
 script:
-  - hugo # This commands builds your website on travis
+    - hugo
+    - echo 'axdlog.com' > public/CNAME
 
 deploy:
-  local_dir: public # Default static site output dir for Hugo
-  repo: zhangzhch/zhangzhch.github.io # This is the slug of the repo you want to deploy your site to
-  target_branch: master # GitHub pages branch to deploy to (in other cases it can be gh-pages)
   provider: pages
-  skip_cleanup: true
-  github_token: abb3decb305c77c2c412cd942043f77e50154969 # This is the authentication which you will setup in the next step in travis-ci dashboard
+  skip-cleanup: true
+  github-token: abb3decb305c77c2c412cd942043f77e50154969  # Set in travis-ci.org dashboard, marked secure
+  verbose: true
+  keep-history: true
+  local-dir: public
+  target_branch: master  # branch contains blog content
   on:
-    branch: master
+    branch: master  # branch contains Hugo generator code
