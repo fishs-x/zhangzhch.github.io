@@ -1,45 +1,20 @@
-# https://docs.travis-ci.com/user/deployment/pages/
-# https://docs.travis-ci.com/user/languages/python/
-
-install:
-    - uname -a
-    - wget https://github.com/gohugoio/hugo/releases/download/v0.45.1/hugo_0.45.1_Linux-64bit.deb
-    - sudo dpkg -i hugo*.deb
-    - hugo version
-    - ls
-    - pwd
-
+sudo: false
+language: go
+git:
+    depth: 1
+install: snap install hugo 
 script:
-    - sudo apt-get install hugo
-    - git submodule foreach git pull origin master
-    - hugo
-    - echo 'Hugo build done!'
-after_script:
-  - git clone "https://zhangzhch:${GithubToken}@${Github_REF}" github-pages
-  - cp ./public/* github-pages -rf
-  - cd github-pages
-  - git add .
-  - git commit -m "Update Blog By TravisCI With Build $TRAVIS_BUILD_NUMBER"
-  - git tag v0.0.$TRAVIS_BUILD_NUMBER -a -m "Auto Taged By TravisCI With Build $TRAVIS_BUILD_NUMBER"
-  # Github Pages
-  - git push --force --quiet "https://zhangzhch:${GithubToken}@${Github_REF}" master:master 
-  - git push --quiet "https://zhangzhch:${GithubToken}@${Github_REF}" master:master --tags
-# deploy:
-  # local_dir: public # Default static site output dir for Hugo
-  # repo: tainzhi/tainzhi.github.io # This is the slug of the repo you want to deploy your site to
-  # target_branch: master # GitHub pages branch to deploy to (in other cases it can be gh-pages)
-  # provider: pages
-  # skip_cleanup: true
-  # github_token: $GithubToken # This is the authentication which you will setup in the next step in travis-ci dashboard
-  # email: qfq61@qq.com
-  # name: "qfq"
-  # on:
-    # branch: master
+    ‐ hugo
+deploy:
+    provider: pages
+    skip_cleanup: true
+    github_token: abb3decb305c77c2c412cd942043f77e50154969
+    on:
+        branch: master
+    local_dir: public
+    repo: zhangzhch/zhangzhch.github.io
+    fqdn: blog.fluobo.cn
+    target_branch: master
+    email: zhangzhch2013@foxmail.com
+    name: zhangzhch
 
-env:
- global:
-   # Github Pages
-   #https://github.com/tainzhi/tainzhi.github.io.git
-   #git@github.com:tainzhi/tainzhi.github.io.git
-   - Github_REF: github.com/zhangzhch/zhangzhch.github.io
-   - GithubToken: abb3decb305c77c2c412cd942043f77e50154969
