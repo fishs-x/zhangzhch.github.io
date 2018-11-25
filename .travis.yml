@@ -10,6 +10,7 @@ install:
     - pwd
 
 script:
+    - sudo apt-get install hugo
     - git submodule foreach git pull origin master
     - hugo
     - echo 'Hugo build done!'
