@@ -1,10 +1,16 @@
+env:
+  - HUGO_VERSION="0.41"
+
 language: go
 
 go:
   - master # This uses automatically the latest version of go
 
 install:
-  - go get github.com/spf13/hugo # This provides the latest version of Hugo to Travis CI
+  - wget -q https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz
+  - tar xf hugo_${HUGO_VERSION}_Linux-64bit.tar.gz
+  - mv hugo ~/bin/
+  - gem install html-proofer
 
 script:
   - hugo # This commands builds your website on travis
