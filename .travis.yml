@@ -3,6 +3,8 @@ language: go
 addons:
   snaps:
   - hugo
+install
+  - snap install hugo
 
 script:
   - hugo server
