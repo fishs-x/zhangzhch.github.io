@@ -1,21 +1,11 @@
-# https://docs.travis-ci.com/user/deployment/pages/
-# https://docs.travis-ci.com/user/languages/python/
-language: python
-
-python:
-    - "3.6"
-
-install:
-    # install latest release version
-    #- wget $(wget -qO- https://api.github.com/repos/gohugoio/hugo/releases/latest | sed -r -n '/browser_download_url/{/Linux-64bit.deb/{s@[^:]*:[[:space:]]*"([^"]*)".*@\1@g;p}}')
-    - wget -qO- https://api.github.com/repos/gohugoio/hugo/releases/latest | sed -r -n '/browser_download_url/{/Linux-64bit.deb/{s@[^:]*:[[:space:]]*"([^"]*)".*@\1@g;p}}' | xargs wget
-    - sudo dpkg -i hugo*.deb
-    - pip install Pygments
-    - rm -rf public 2> /dev/null
+dist: xenial
+language: go
+addons:
+  snaps:
+  - hugo
 
 script:
-    - hugo
-    - echo 'axdlog.com' > public/CNAME
+  - hugo server
 
 deploy:
   provider: pages
